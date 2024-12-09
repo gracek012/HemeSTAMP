@@ -7,6 +7,7 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = (
     '[Insert your own application credentials here]'
 )
 os.environ['GCLOUD_PROJECT'] = '[Insert name of google cloud project hosting EHR data here]'
+database = '[Insert name of GCP table where you want to store responses]'
 
 client = bigquery.Client("[Insert name of google cloud project hosting EHR data here]")
 table_id = "[Insert name of google BQ where you will be storing this data]"
@@ -59,7 +60,7 @@ def send_email():
                 print(row)
                 mrn_val = row['MRN']
                 update_msg_status_query = """
-                UPDATE `som-nero-phi-jonc101-secure.grace_db.hemestamp_responses`
+                UPDATE database
                 SET Msg_sent = True
                 WHERE MRN = {0}
                 """.format(mrn_val)
