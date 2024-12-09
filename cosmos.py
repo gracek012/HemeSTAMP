@@ -7,16 +7,10 @@ import logging
 import os
 
 # import config
-settings = {
-    'host': os.environ["COSMOS_HOST"],
-    'master_key': os.environ["COSMOS_KEY"],
-    'database_id': 'machinelearningdb',
-    'container_id': 'HemeStamp'
-}
-HOST = settings['host']
-MASTER_KEY = settings['master_key']
-DATABASE_ID = settings['database_id']
-CONTAINER_ID = settings['container_id']
+HOST = os.environ["COSMOS_HOST"]
+MASTER_KEY = os.environ["COSMOS_KEY"]
+DATABASE_ID = os.environ["DATABASE_ID"]
+CONTAINER_ID = os.environ["CONTAINER_ID"]
 
 
 def query_items(container, partition_key):
@@ -28,9 +22,6 @@ def query_items(container, partition_key):
         query=f"SELECT * FROM c WHERE c.partitionKey = '{partition_key}'",
     ))
     return items
-    # for item in items:
-    #    print(f"Item: {item}")
-
 
 def query_items_bydate(container, qdate, partition_key):
     print('\nQuerying for an  Item by Partition Key\n')
@@ -89,7 +80,6 @@ def create_item(container, patient, partition_key):
         partition_key: string to identify the model that this inference relates
             to
     """
-    # farts -- nice rob
     epic_patient = get_epic_order(patient, partition_key)
     container.create_item(body=epic_patient)
 
