@@ -322,12 +322,6 @@ class DeploymentContainer(object):
             race_mapped = RACE_MAPPING[demographic_json['Race'].split('^')[0]]
             self.patient_dict[f"race_{race_mapped}"] = 1
 
-        ### TODO ###
-        # In EPIC multiple races can be listed for a given patient, in STARR
-        # data only one race is listed per patient. Here we take the first
-        # race listed for a patient to be consistent, but this may not always
-        # be correct - probe into how STARR makes this mapping.
-
     def _get_lab_results(self):
         """
         Pulls lab results data for desired base_name component using
@@ -430,10 +424,7 @@ class DeploymentContainer(object):
             data=flowsheet_packet
         )
         flowsheet_data = json.loads(flowsheet_response.text)
-
-        # TODO implement binning and play around with IDS so I can grab a set
-        # of flowsheets.
-
+        
     def _get_bin(self, feature_name, value):
         """
         Given the numerical value for a feature, consults the feature_bin_map
@@ -448,10 +439,6 @@ class DeploymentContainer(object):
             feature : `{feature}_{binNumber}`
                 ex: if hematocrit in the 5th bin then HCT_4
         """
-        # min_list = (self.bin_lup
-        #             .query('feature == @feature_name', engine='python')
-        #             ['bin_min'].values
-        #             )
         min_list = self.bin_lup[self.bin_lup['feature'] == feature_name].values[0]
         min_list = min_list[1:]  # pop first element which is feature name
 
@@ -460,13 +447,3 @@ class DeploymentContainer(object):
                 return f"{feature_name}_{i}"
 
         return f"{feature_name}_{len(min_list)}"
-
-        # for i in range(len(min_list) - 1):
-        #     if i == 0 and value < min_list[i]:  # put in first bin
-        #         return f"{feature_name}_{i}"
-
-        #     if value >= min_list[i] and value < min_list[i+1]:
-        #         return f"{feature_name}_{i}"
-
-        # Otherwise in last bin
-        # return f"{feature_name}_{len(min_list)-1}"
