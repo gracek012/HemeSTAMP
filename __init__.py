@@ -1,6 +1,5 @@
 import logging
 import json
-# from . import deploy # pylint: disable=relative-beyond-top-level
 import azure.functions as func
 import pickle
 import traceback
@@ -19,7 +18,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             'This function executed unsuccessfully. No Score was processed.',
             status_code=400
         )
-   # 3/16/22 - get EpicENV and client id  - SP
     ENV = req.params.get('EPICENV')
     if not ENV:
         return func.HttpResponse(
@@ -70,7 +68,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         except Exception as e:
             dp.get_patient_identifiers()
-            # Save both R4 and STU3 to not screw with any code Grace has
             error_dict = {
                 'FHIR ID' : dp.patient_dict['FHIR'],
                 'FHIR STU3': dp.patient_dict['FHIR STU3'],
